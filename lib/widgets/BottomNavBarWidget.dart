@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/SignInPage.dart';
 import 'package:flutter_app/pages/SignUpPage.dart';
 import 'package:flutter_app/pages/cart.dart';
 import 'package:flutter_app/provider/provider_skip_profile.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
   static const String id = 'BottomNavBarWidget';
@@ -81,10 +83,22 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
   }
 }
 
-class UserProfile extends StatelessWidget {
-  const UserProfile({
-    Key key,
-  }) : super(key: key);
+class UserProfile extends StatefulWidget {
+  @override
+  _UserProfileState createState() => _UserProfileState();
+}
+
+class _UserProfileState extends State<UserProfile> {
+  final _auth = FirebaseAuth.instance;
+  FirebaseUser loggedInUser;
+
+  Future<String> getUserEmail() async {
+    final user = await _auth.currentUser();
+    if (user != null) {
+      loggedInUser = user;
+    }
+    return loggedInUser.email;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +127,47 @@ class UserProfile extends StatelessWidget {
             ),
           )
         : Container(
-            child: Center(child: Text('Profile')),
+            child: FutureBuilder(
+              future: getUserEmail(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData){
+                  return Center(
+                    child: CircularProgressIndicator(backgroundColor: Colors.blueAccent,),
+                  );
+                }
+                
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Profile',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.mail),
+                        Text(snapshot.data),
+                      ],
+                    ),
+                    SizedBox(height: 30.0),
+                    RaisedButton.icon(
+                      onPressed: () async {
+                        await _auth.signOut();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignInPage(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.exit_to_app),
+                      label: Text('Logout'),
+                    ),
+                  ],
+                );
+              },
+            ),
           );
   }
 }

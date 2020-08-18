@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/BestFoodWidget.dart';
 import 'package:flutter_app/widgets/TopMenus.dart';
+// import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   static const String id = 'HomePage';
@@ -9,6 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // void getData ()async{
+  //   http.Response response = await http.get('');
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +33,8 @@ class _HomePageState extends State<HomePage> {
                 Icons.notifications_none,
                 color: Color(0xFF3a3737),
               ),
-              onPressed: () {})
+              onPressed: () {}
+            ),
         ],
       ),
       body: SingleChildScrollView(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/cart_model.dart';
 import 'package:flutter_app/models/catalog.dart';
 import 'package:flutter_app/pages/HomePage.dart';
+import 'package:flutter_app/pages/SignInPage.dart';
 import 'package:flutter_app/pages/SignUpPage.dart';
 import 'package:flutter_app/provider/provider_skip_profile.dart';
 import 'package:flutter_app/widgets/BottomNavBarWidget.dart';
@@ -15,8 +16,6 @@ void main() {
 /// can use [MyApp] while mocking the providers
 ///
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -32,9 +31,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        home: SignInPage(),
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Roboto', hintColor: Color(0xFFd0cece)),
-        initialRoute: SignUpPage.id,
+        theme: ThemeData(
+          fontFamily: 'Roboto',
+          hintColor: Color(0xFFd0cece),
+        ),
+        // initialRoute: SignUpPage.id,
         routes: {
           BottomNavBarWidget.id: (context) => BottomNavBarWidget(),
           SignUpPage.id: (context) => SignUpPage(),

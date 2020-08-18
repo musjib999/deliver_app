@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app/animation/ScaleRoute.dart';
-import 'package:flutter_app/pages/HomePage.dart';
+// import 'package:flutter_app/pages/HomePage.dart';
 import 'package:flutter_app/pages/SignUpPage.dart';
 import 'package:flutter_app/widgets/BottomNavBarWidget.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -18,6 +18,9 @@ class _SignInPageState extends State<SignInPage> {
   String password;
   final _auth = FirebaseAuth.instance;
   bool mySpiner = false;
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +68,7 @@ class _SignInPageState extends State<SignInPage> {
                         height: 15,
                       ),
                       TextField(
+                        controller: emailController,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
                         showCursor: true,
@@ -98,6 +102,7 @@ class _SignInPageState extends State<SignInPage> {
                         height: 15,
                       ),
                       TextField(
+                        controller: passwordController,
                         obscureText: _showPassword,
                         showCursor: true,
                         decoration: InputDecoration(
@@ -163,6 +168,9 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       SignInButtonWidget(
                         onTap: () async {
+                          String email = emailController.text;
+                          String password = passwordController.text;
+
                           setState(() {
                             mySpiner = true;
                           });
@@ -195,9 +203,13 @@ class _SignInPageState extends State<SignInPage> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
-                      onTap: () => {
+                      onTap: () {
                         Navigator.pushReplacement(
-                            context, ScaleRoute(page: SignUpPage()))
+                          context,
+                          ScaleRoute(
+                            page: SignUpPage(),
+                          ),
+                        );
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
